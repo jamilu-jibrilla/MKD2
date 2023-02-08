@@ -33,6 +33,15 @@ const Formpage = () => {
     const newData = data.filter((item) => {
       return item.id != id;
     });
+    let delItem = data.filter((item) => {
+      return item.id == id;
+    })[0];
+    if (delItem.companyId) {
+      let URL = baseURL + `contract-forms/${delItem.companyId}`;
+      Api.delete(URL, {}).then((res) => {
+        console.log(res);
+      });
+    }
     setData(newData);
     setIsOpen(false);
   };
@@ -50,14 +59,14 @@ const Formpage = () => {
     };
 
     Api.post(URL, reqBody).then((res) => {
-      console.log(res);
+      let data = res.data.data;
       setData((prev) => {
         return [
           {
             id: generateUUID(),
-            name: reqBody.name,
-            date: new Date().toDateString(),
-            companyId: reqBody.companyId,
+            name: data.name,
+            date: new Date(data.created_at).toDateString(),
+            companyId: data.company_id,
           },
           ...prev,
         ];
