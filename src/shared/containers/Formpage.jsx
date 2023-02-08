@@ -1,31 +1,30 @@
 /* eslint-disable arrow-body-style */
 import React, { useEffect, useState } from 'react';
 import './Formpage.css';
-import { generateUUID } from 'Utils/helpers';
 import { baseURL, Api } from 'Utils/api';
 import Formpagemodal from './Formpagemodal';
 import Formadddmodal from './Formaddmodal';
 
 const Formpage = () => {
+  const companyId = localStorage.getItem('companyId');
   const [id, setId] = useState(0);
   const trash = 'https://cdn-icons-png.flaticon.com/512/3515/3515498.png';
+  const [data, setData] = useState([]);
 
-  const [data, setData] = useState([
-    { id: '1', name: 'Ben test', date: 'Aug 4, 2022' },
-    { id: '2', name: 'Ben test no sign', date: 'Aug 4, 2022' },
-    { id: '3', name: 'Pau test', date: 'Aug 4, 2022' },
-    { id: '4', name: 'sss', date: 'Aug 4, 2022' },
-    { id: '5', name: 'Sow signature', date: 'Aug 4, 2022' },
-  ]);
+  useEffect(() => {
+    let URL2 = baseURL + `companies/${companyId}/contract-forms`;
+    Api.get(URL2, {}).then((res) => setData(res.data.data));
+  }, []);
 
   const [formData, setFormData] = useState({
-    company_id: '',
+    company_id: companyId,
     name: '',
     replacement_tags: '',
     status: 'active',
     template: '',
     has_signature: true,
   });
+
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
 
@@ -33,17 +32,17 @@ const Formpage = () => {
     const newData = data.filter((item) => {
       return item.id != id;
     });
+
     let delItem = data.filter((item) => {
       return item.id == id;
     })[0];
-    if (delItem.companyId) {
-      let URL = baseURL + `contract-forms/${delItem.companyId}`;
-      Api.delete(URL, {}).then((res) => {
-        console.log(res);
-      });
-    }
-    setData(newData);
-    setIsOpen(false);
+
+    let URL = baseURL + `contract-forms/${delItem.id}`;
+
+    Api.delete(URL, {}).then((res) => {
+      setData(newData);
+      setIsOpen(false);
+    });
   };
 
   const handleSubmit = () => {
@@ -63,9 +62,9 @@ const Formpage = () => {
       setData((prev) => {
         return [
           {
-            id: generateUUID(),
+            id: data.id,
             name: data.name,
-            date: new Date(data.created_at).toDateString(),
+            date: data.created_at,
             companyId: data.company_id,
           },
           ...prev,
@@ -73,7 +72,7 @@ const Formpage = () => {
       });
 
       setFormData({
-        company_id: '',
+        company_id: companyId,
         name: '',
         replacement_tags: '',
         status: 'active',
@@ -82,10 +81,8 @@ const Formpage = () => {
       });
       setIsOpen2(false);
     });
-
-    // let URL2 = baseURL + 'companies/1/contract-forms';
-    // Api.get(URL2, {}).then((res) => console.log(res));
   };
+
   return (
     <div className="forms-page">
       <Formpagemodal isOpen={isOpen} setIsOpen={setIsOpen} handleDelete={handleDelete} />
@@ -117,7 +114,7 @@ const Formpage = () => {
                   {card.name}
                 </div>
                 <div className="col col-3" data-label="Amount">
-                  {card.date}
+                  {new Date(card.created_at).toDateString()}
                 </div>
                 <div className="col col-4" data-label="Payment Status">
                   <img

@@ -78,6 +78,7 @@ export const userDetails =
           type: FIRST_COMPANY_ID,
           payload: company.id,
         });
+        localStorage.setItem('companyId', company.id);
 
         // set company true for route change
         companyExists = true;

@@ -35,6 +35,7 @@ export const login =
   async (dispatch: any, _getState = null, utils: any) => {
     const data = await handleApiRequest(dispatch, utils.Api[type](url, requestData));
     if (data) {
+      console.log(data);
       const { token } = data;
       // update the axios headers
       utils.Api.setAuthorizationToken(token);

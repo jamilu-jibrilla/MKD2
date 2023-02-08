@@ -41,19 +41,6 @@ const Formaddmodal = ({ isOpen2, setIsOpen2, setFormData, handleSubmit }) => {
 
             <div className="md-form mb-3">
               <input
-                type="number"
-                id="form29"
-                onInput={handleInputChange}
-                name="company_id"
-                className="form-control validate"
-              />
-              <label data-error="wrong" data-success="right" htmlFor="form29">
-                Company_id
-              </label>
-            </div>
-
-            <div className="md-form mb-3">
-              <input
                 type="text"
                 id="form27"
                 onInput={handleInputChange}
