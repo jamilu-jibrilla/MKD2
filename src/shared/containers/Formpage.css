@@ -5,7 +5,9 @@
   border: none;
   border-radius: 0 0 16px 16px;
   background: linear-gradient(316.14deg, #6d00e6 1.84%, #9a00ff) !important;
-  margin-top: -4 !important;
+  margin-top: -4;
+  position: relative;
+  top: -20px;
   margin-left: -1.4rem;
 }
 

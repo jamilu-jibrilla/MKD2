@@ -49,9 +49,18 @@ const Formpage = () => {
       has_signature: formData.has_signature,
     };
 
-    Api.post(URL, reqBody).then(() => {
+    Api.post(URL, reqBody).then((res) => {
+      console.log(res);
       setData((prev) => {
-        return [{ id: generateUUID(), name: reqBody.name, date: new Date().toDateString() }, ...prev];
+        return [
+          {
+            id: generateUUID(),
+            name: reqBody.name,
+            date: new Date().toDateString(),
+            companyId: reqBody.companyId,
+          },
+          ...prev,
+        ];
       });
 
       setFormData({
@@ -103,8 +112,6 @@ const Formpage = () => {
                 </div>
                 <div className="col col-4" data-label="Payment Status">
                   <img
-                    id={card.id}
-                    data-id={card.id}
                     onClick={() => {
                       setId(card.id);
                       setIsOpen(true);
